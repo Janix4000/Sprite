@@ -25,7 +25,7 @@
 #include "ChiliException.h"
 #include "Colors.h"
 #include "Surface.h"
-//#include "Rect.h"
+#include "RectI.h"
 #include <cassert>
 
 class Graphics
@@ -61,7 +61,13 @@ public:
 		PutPixel( x,y,{ unsigned char( r ),unsigned char( g ),unsigned char( b ) } );
 	}
 	void PutPixel( int x,int y,Color c );
-	void DrawSprite(int x, int y, const Surface& s);
+	void DrawSpriteNonechroma(int x, int y, const Surface& s);
+	void DrawSpriteNonechroma(int x, int y, const RectI& rect, const Surface& s);
+	void DrawSpriteNonechroma(int x, int y, RectI rect, const RectI& clip, const Surface& s);
+	void DrawSprite(int x, int y, const Surface& s, Color chroma = Colors::Magenta);
+	void DrawSprite(int x, int y, RectI rect, const Surface& s, Color chroma = Colors::Magenta);
+	void DrawSprite(int x, int y, RectI rect, const RectI& clip, const Surface& s, Color chroma = Colors::Magenta);
+	RectI GetRect() const;
 	template<typename E>
 	void DrawSprite( int x,int y,const Surface& s,E effect )
 	{
