@@ -8,7 +8,7 @@ class Animation
 {
 public:
 	Animation(int x, int y, int width, int height, Surface& sprite,
-		float holdTime, int count, Color chroma = Colors::Magenta);
+		float holdTime, int count, int alpha = 255, Color chroma = Colors::Magenta);
 	void Draw(const Vei2& pos, Graphics& gfx) const;
 	void Update(float dt);
 private:
@@ -21,4 +21,5 @@ private:
 	float curTime = 0.0f;
 	int index = 0;
 	Color chroma;
+	int alpha = 255;
 };

@@ -46,7 +46,8 @@ private:
 	/********************************/
 	/*  User Variables              */
 	Surface surf = Surface( "pilgrim108x140.bmp" );
-	Animation marleLeft = Animation(0, 0, 108, 140, surf, 0.08f, 8);
+
+	Animation marleLeft = Animation(0, 0, 108, 140, surf, 0.1f, 8, 10);
 	FrameTimer ft;
 	/********************************/
 };

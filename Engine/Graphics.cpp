@@ -411,6 +411,82 @@ void Graphics::DrawSprite( int x,int y,RectI srcRect,const RectI& clip,const Sur
 	}
 }
 
+void Graphics::DrawSpriteTransparent(int x, int y, const Surface & s, int alpha, Color chroma)
+{
+	DrawSpriteTransparent(x, y, s.GetRect(), s, alpha, chroma);
+}
+
+void Graphics::DrawSpriteTransparent(int x, int y, RectI srcRect, const Surface & s, int alpha, Color chroma)
+{
+	DrawSpriteTransparent(x, y, srcRect, GetScreenRect(), s, alpha, chroma);
+}
+
+void Graphics::DrawSpriteTransparent(int x, int y, RectI srcRect, const RectI & clip, const Surface & s, int alpha, Color chroma)
+{
+	assert(srcRect.left >= 0);
+	assert(srcRect.right <= s.GetWidth());
+	assert(srcRect.top >= 0);
+	assert(srcRect.bottom <= s.GetHeight());
+	bool trans = alpha != 255;
+
+	if (x < clip.left)
+	{
+		srcRect.left += clip.left - x;
+		x = clip.left;
+	}
+	if (y < clip.top)
+	{
+		srcRect.top += clip.top - y;
+		y = clip.top;
+	}
+	if (x + srcRect.GetWidth() > clip.right)
+	{
+		srcRect.right -= x + srcRect.GetWidth() - clip.right;
+	}
+	if (y + srcRect.GetHeight() > clip.bottom)
+	{
+		srcRect.bottom -= y + srcRect.GetHeight() - clip.bottom;
+	}
+	for (int sy = srcRect.top; sy < srcRect.bottom; sy++)
+	{
+		for (int sx = srcRect.left; sx < srcRect.right; sx++)
+		{
+			Color c = s.GetPixel(sx, sy);
+			if (c != chroma)
+			{
+				int xDest = x + sx - srcRect.left;
+				int yDest = y + sy - srcRect.top;
+				if (trans)
+				{
+					Color cDest = GetPixel(xDest, yDest);
+
+					const int cR = c.GetR();
+					const int cG = c.GetG();
+					const int cB = c.GetB();
+					
+					
+					c.SetR(unsigned char ( ( (255 - alpha) * cDest.GetR() + alpha * cR ) / 255 ) );
+					c.SetG(unsigned char ( ( (255 - alpha) * cDest.GetG() + alpha * cG ) / 255 ) );
+					c.SetB(unsigned char ( ( (255 - alpha) * cDest.GetB() + alpha * cB ) / 255 ) );
+					
+				}
+				PutPixel(xDest, yDest, c);
+			}
+		}
+	}
+}
+
+
+
+Color Graphics::GetPixel(int x, int y) const
+{
+	assert(x >= 0);
+	assert(x < int(Graphics::ScreenWidth));
+	assert(y >= 0);
+	assert(y < int(Graphics::ScreenHeight));
+	return pSysBuffer[x + y * Graphics::ScreenWidth];
+}
+
 
 //////////////////////////////////////////////////
 //           Graphics Exception

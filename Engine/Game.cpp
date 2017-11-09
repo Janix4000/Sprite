@@ -43,5 +43,6 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
+	gfx.DrawSprite(100, 100, { 0, 108, 0, 140 }, surf);
 	marleLeft.Draw({ wnd.mouse.GetPosX()-50, wnd.mouse.GetPosY()-50 }, gfx);
 }
